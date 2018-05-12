@@ -1,8 +1,11 @@
-from keras.layers import *
 from keras.metrics import *
+from keras.layers import *
 from keras.models import *
+from keras.callbacks import *
 from keras.optimizers import *
 from keras.preprocessing.image import ImageDataGenerator
+
+
 
 # dimensions of our images.
 img_width, img_height = 128, 128
@@ -13,6 +16,10 @@ nb_train_samples = 435130
 nb_validation_samples = 24426
 epochs = 50
 batch_size = 64
+
+# changez le nom à chaque fois svp ↓
+experiment_name = "INATURALIST_E500_D512_C16.3.3_Lr0.01_Relu"
+tb_callback = TensorBoard("./logs/" + experiment_name, )
 
 print("Model training will start soon")
 
@@ -81,6 +88,7 @@ model.fit_generator(
     train_generator,
     steps_per_epoch=nb_train_samples // batch_size,
     epochs=epochs,
+    callbacks=[tb_callback],
     validation_data=validation_generator,
     validation_steps=nb_validation_samples // batch_size)
 

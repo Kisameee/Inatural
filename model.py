@@ -2,7 +2,6 @@ from keras.layers import *
 from keras.metrics import *
 from keras.models import *
 from keras.optimizers import *
-from keras.optimizers import SGD
 from keras.preprocessing.image import ImageDataGenerator
 
 # dimensions of our images.
@@ -10,7 +9,7 @@ img_width, img_height = 128, 128
 
 train_data_dir = 'data/train'
 validation_data_dir = 'data/validation'
-nb_train_samples = 43513
+nb_train_samples = 435130
 nb_validation_samples = 24426
 epochs = 50
 batch_size = 64
@@ -39,12 +38,18 @@ model.add(Flatten())
 model.add(Dense(64))
 model.add(Activation('relu'))
 model.add(Dropout(0.5))
-model.add(Dense(1))
+model.add(Dense(8142))
 model.add(Activation('softmax'))
 
-sgd = SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+sgd = optimizers.SGD(lr=0.1, decay=1e-6, momentum=0.9, nesterov=True)
 
-model.compile(SGD, mse, metrics=['categorical_accuracy'])
+# model.compile(loss='binary_crossentropy',
+#               optimizer='rmsprop',
+#               metrics=['accuracy'])
+
+
+# model.compile(sgd, mse, metrics=['categorical_accuracy'])
+model.compile(sgd, loss='categorical_crossentropy', metrics=['accuracy'])
 
 # this is the augmentation configuration we will use for training
 train_datagen = ImageDataGenerator(

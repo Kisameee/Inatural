@@ -1,8 +1,8 @@
 from keras import applications
 from keras.callbacks import *
 from keras.layers import *
+from keras.metrics import *
 from keras.models import *
-from keras.optimizers import *
 from keras.preprocessing.image import ImageDataGenerator
 
 # path to the model weights files.
@@ -10,16 +10,15 @@ weights_path = '../keras/examples/vgg16_weights.h5'
 # dimensions of our images.
 
 img_width, img_height = 128, 128
-
 train_data_dir = 'data/train'
 validation_data_dir = 'data/validation'
 nb_train_samples = 435130
 nb_validation_samples = 24426
-epochs = 50
+epochs = 2
 batch_size = 64
 
 # changez le nom à chaque fois svp ↓
-experiment_name = "INATURALIST_E500_D512_C16.3.3_Lr0.01_Relu"
+experiment_name = "INATURALIST_E25_Mobilenet8142_D8142Relu_D8142Sigmoids_Lr0.3"
 tb_callback = TensorBoard("./logs/" + experiment_name, )
 
 print("Model training will start soon")
@@ -54,9 +53,9 @@ for layer in model.layers[:25]:
 
 # compile the model with a SGD/momentum optimizer
 # and a very slow learning rate.
-super_model.compile(loss='binary_crossentropy',
-                    optimizer=optimizers.SGD(lr=1e-4, momentum=0.9),
-                    metrics=['accuracy'])
+super_model.compile(loss=categorical_crossentropy,
+                    optimizer=optimizers.SGD(lr=0.3, momentum=0.9),
+                    metrics=[categorical_accuracy])
 
 # this is the augmentation configuration we will use for training
 train_datagen = ImageDataGenerator(
@@ -92,4 +91,4 @@ super_model.fit_generator(
     validation_data=validation_generator,
     validation_steps=nb_validation_samples // batch_size)
 
-super_model.save_weights('second_try.h5')
+super_model.save_weights('mobilenet.h5')

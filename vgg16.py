@@ -1,6 +1,7 @@
 from keras import applications
 from keras.callbacks import *
 from keras.layers import *
+from keras.metrics import *
 from keras.models import *
 from keras.optimizers import *
 from keras.preprocessing.image import ImageDataGenerator
@@ -19,7 +20,7 @@ epochs = 50
 batch_size = 64
 
 # changez le nom à chaque fois svp ↓
-experiment_name = "INATURALIST_E500_D512_C16.3.3_Lr0.01_Relu"
+experiment_name = "INATURALIST_E500_D512_C16.3.3_Lr0.3 vgg 16_Relu"
 tb_callback = TensorBoard("./logs/" + experiment_name, )
 
 print("Model training will start soon")
@@ -53,9 +54,9 @@ for layer in model.layers[:25]:
 
 # compile the model with a SGD/momentum optimizer
 # and a very slow learning rate.
-super_model.compile(loss='binary_crossentropy',
-                    optimizer=optimizers.SGD(lr=1e-4, momentum=0.9),
-                    metrics=['accuracy'])
+super_model.compile(loss=categorical_crossentropy,
+                    optimizer=optimizers.SGD(lr=0.3, momentum=0.9),
+                    metrics=[categorical_accuracy])
 
 # this is the augmentation configuration we will use for training
 train_datagen = ImageDataGenerator(
@@ -91,4 +92,4 @@ super_model.fit_generator(
     validation_data=validation_generator,
     validation_steps=nb_validation_samples // batch_size)
 
-super_model.save_weights('second_try.h5')
+super_model.save('vgg16.h5')

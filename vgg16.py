@@ -10,7 +10,7 @@ from keras.preprocessing.image import ImageDataGenerator
 weights_path = '../keras/examples/vgg16_weights.h5'
 # dimensions of our images.
 
-img_width, img_height = 128, 128
+img_width, img_height = 128, 64
 
 train_data_dir = 'data/train'
 validation_data_dir = 'data/validation'
